@@ -18,9 +18,7 @@ const TableThree = () => {
   }, []);
 
   const userDetail = async () => {
-    const response = await axios.get("/api/users/getUser", {
-      cache: "no-store",
-    });
+    const response = await axios.get("/api/users/getUser");
     console.log(response.data.usersData);
     const data = response.data.usersData;
     setUserData(data);

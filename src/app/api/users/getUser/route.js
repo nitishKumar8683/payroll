@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 connect();
 
 export async function GET() {
+  console.log("not getting data")
   try {
     const usersData = await User.find({ role: { $ne: "admin" } , isDelete : {$ne : "1"} }).select(
       "-password",
