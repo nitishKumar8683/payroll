@@ -28,9 +28,16 @@ const TableThree = () => {
   }, []);
 
   const userDetail = async () => {
-    const response = await axios.get("/api/users/getUser");
-    const data = response.data.usersData;
-    setUserData(data);
+    fetch("/api/users/getUser")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.usersData)
+        setUserData(data.usersData);
+      })
+      .catch((error) => console.error(error));
+    // const response = await axios.get("/api/users/getUser");
+    // const data = response.data.usersData;
+    // setUserData(data);
   };
 
   const deleteUser = async (_id: any) => {
