@@ -4,10 +4,6 @@ export function middleware(request) {
   const path = request.nextUrl.pathname;
 
   const isPublicPath = path === "/login";
-  // path === "/calendar" ||
-  // path === "/profile" ||
-  // path === "/forms/form-layout" ||
-  // path === "/tables";
 
   const token = request.cookies.get("token")?.value || "";
 

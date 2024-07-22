@@ -4,15 +4,19 @@ import { NextResponse } from "next/server";
 
 connect();
 
-export async function GET() {
-  console.log("not getting data")
+export async function GET(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Authorization, Accept");
+
   try {
-    const usersData = await User.find({ role: { $ne: "admin" } , isDelete : {$ne : "1"} }).select(
-      "-password",
-    );
+    const usersData = await User.find({
+      role: { $ne: "admin" },
+      isDelete: { $ne: "1" },
+    }).select("-password");
     console.log(usersData);
     return NextResponse.json({
-      message: "User Reterive Successfully",
+      message: "User Retrieve Successfully",
       success: true,
       usersData,
     });
