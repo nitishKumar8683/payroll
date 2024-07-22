@@ -1,21 +1,55 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import Image from "next/image";
-import { Metadata } from "next";
+"use client";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-
-export const metadata: Metadata = {
-  title: "Next.js Settings | TailAdmin - Next.js Dashboard Template",
-  description:
-    "This is Next.js Settings page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
-};
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Settings = () => {
+  const [dataUser, setDataUser] = useState<any>("nothing");
+  const [meUpdate, setMeUpdate] = useState({
+    phoneNumber: "",
+  });
+
+  useEffect(() => {
+    meDataFetch();
+  }, []);
+  const meDataFetch = async () => {
+    const response = await axios.get("/api/users/me");
+    const data = response.data.dataUser;
+    console.log(data);
+    setDataUser(data);
+  };
+
+  const updateProfile = async (_id: any, e: any) => {
+    e.preventDefault();
+    console.log(meUpdate.phoneNumber);
+    console.log(_id);
+    const id = _id;
+    console.log(meUpdate.phoneNumber.length);
+    if (!meUpdate.phoneNumber) {
+      toast.error("Enter Phone Number for update");
+    } else if (meUpdate.phoneNumber.length > 10) {
+      toast.error("Phone Number must be 10 digits");
+    } else if (meUpdate.phoneNumber.length < 10) {
+      toast.error("Phone Number must be 10 digits");
+    } else {
+      const response = await axios.put(
+        `/api/users/updateMeProfile/${id}`,
+        meUpdate.phoneNumber,
+      );
+      if (response) {
+        toast.success(response.data.message);
+      }
+      console.log(response);
+    }
+  };
   return (
     <DefaultLayout>
       <div className="mx-auto max-w-270">
-        <Breadcrumb pageName="Settings" />
-
-        <div className="grid grid-cols-5 gap-8">
+        {/* <Breadcrumb pageName="Settings" /> */}
+        <ToastContainer />
+        <div className="grid-cols grid gap-8">
           <div className="col-span-5 xl:col-span-3">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
@@ -62,10 +96,9 @@ const Settings = () => {
                         <input
                           className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                           type="text"
-                          name="fullName"
-                          id="fullName"
-                          placeholder="Devid Jhon"
-                          defaultValue="Devid Jhon"
+                          name="name"
+                          id="name"
+                          defaultValue={dataUser.name}
                         />
                       </div>
                     </div>
@@ -83,7 +116,17 @@ const Settings = () => {
                         name="phoneNumber"
                         id="phoneNumber"
                         placeholder="+990 3343 7865"
-                        defaultValue="+990 3343 7865"
+                        defaultValue={
+                          dataUser.phoneNumber
+                            ? dataUser.phoneNumber
+                            : meUpdate.phoneNumber
+                        }
+                        onChange={(e) =>
+                          setMeUpdate({
+                            ...meUpdate,
+                            phoneNumber: e.target.value,
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -124,10 +167,9 @@ const Settings = () => {
                       <input
                         className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                         type="email"
-                        name="emailAddress"
-                        id="emailAddress"
-                        placeholder="devidjond45@gmail.com"
-                        defaultValue="devidjond45@gmail.com"
+                        name="email"
+                        id="email"
+                        defaultValue={dataUser.email}
                       />
                     </div>
                   </div>
@@ -137,15 +179,15 @@ const Settings = () => {
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
                       htmlFor="Username"
                     >
-                      Username
+                      Role
                     </label>
                     <input
                       className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                       type="text"
                       name="Username"
                       id="Username"
-                      placeholder="devidjhon24"
-                      defaultValue="devidjhon24"
+                      defaultValue={dataUser.role}
+                      readOnly
                     />
                   </div>
 
@@ -200,15 +242,16 @@ const Settings = () => {
                   </div>
 
                   <div className="flex justify-end gap-4.5">
-                    <button
+                    {/* <button
                       className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                       type="submit"
                     >
                       Cancel
-                    </button>
+                    </button> */}
                     <button
                       className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
                       type="submit"
+                      onClick={(e) => updateProfile(dataUser._id, e)}
                     >
                       Save
                     </button>
@@ -217,7 +260,7 @@ const Settings = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-5 xl:col-span-2">
+          {/* <div className="col-span-5 xl:col-span-2">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
                 <h3 className="font-medium text-black dark:text-white">
@@ -314,7 +357,7 @@ const Settings = () => {
                 </form>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </DefaultLayout>

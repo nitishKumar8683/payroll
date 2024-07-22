@@ -28,5 +28,6 @@ export const config = {
     "/profile",
     "/forms/form-layout",
     "/tables",
+    "/settings",
   ],
 };

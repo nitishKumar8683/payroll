@@ -34,13 +34,17 @@ export default function Login() {
         if (response.data.tokenData.role == "admin") {
           router.push("/");
         } else {
-          alert("Wrong Credential");
+          alert("Only for admin ");
+          setUser({
+            email: "",
+            password: "",
+          });
         }
       } catch (error: any) {
         setUser({
-            email : "",
-            password : ""
-        })
+          email: "",
+          password: "",
+        });
         toast.error(error.response.data.message);
         console.log(error.response.data.message);
       } finally {
