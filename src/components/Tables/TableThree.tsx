@@ -1,13 +1,10 @@
 "use client";
-import { connect } from "@/db/dbConfig";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-connect()
 
 interface User {
   _id: string;
