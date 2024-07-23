@@ -5,8 +5,6 @@ import { NextResponse } from "next/server";
 connect();
 
 export async function GET(req, res) {
- 
-
   try {
     const usersData = await User.find({
       role: { $ne: "admin" },

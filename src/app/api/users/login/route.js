@@ -33,7 +33,7 @@ export async function POST(request) {
       id: user._id,
       name: user.name,
       email: user.email,
-      role : user.role
+      role: user.role,
     };
 
     const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, {

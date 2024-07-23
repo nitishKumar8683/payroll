@@ -21,6 +21,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  image_url: {
+    type: String,
+    default: "",
+  },
+  public_id: {
+    type: String,
+    default: "",
+  },
 });
 
 const User = mongoose.models.users || mongoose.model("users", userSchema);

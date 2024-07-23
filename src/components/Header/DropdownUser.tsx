@@ -45,17 +45,16 @@ const DropdownUser = () => {
             <span className="block text-xs">{dataUser.role}</span>
           </span>
 
-          <span className="h-12 w-12 rounded-full">
-            <Image
-              width={112}
-              height={112}
-              src={"/images/user/user-01.png"}
-              style={{
-                width: "auto",
-                height: "auto",
-              }}
-              alt="User"
-            />
+          <span className="h-16 w-16 overflow-hidden rounded-full">
+            <div className="bg-gray-200 relative h-full w-full rounded-full">
+              <Image
+                src={dataUser.image_url || "/images/cover/cover-01.png"}
+                alt="User"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-full"
+              />
+            </div>
           </span>
 
           <svg
