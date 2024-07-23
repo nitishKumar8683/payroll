@@ -99,6 +99,7 @@ const Settings = () => {
                           name="name"
                           id="name"
                           defaultValue={dataUser.name}
+                          readOnly
                         />
                       </div>
                     </div>
@@ -170,6 +171,7 @@ const Settings = () => {
                         name="email"
                         id="email"
                         defaultValue={dataUser.email}
+                        readOnly
                       />
                     </div>
                   </div>
@@ -248,13 +250,22 @@ const Settings = () => {
                     >
                       Cancel
                     </button> */}
-                    <button
-                      className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
-                      type="submit"
-                      onClick={(e) => updateProfile(dataUser._id, e)}
-                    >
-                      Save
-                    </button>
+                    {dataUser.phoneNumber ? (
+                      <button
+                        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 cursor-not-allowed "
+                        disabled
+                      >
+                        Already Updated
+                      </button>
+                    ) : (
+                      <button
+                        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
+                        type="submit"
+                        onClick={(e) => updateProfile(dataUser._id, e)}
+                      >
+                        Save
+                      </button>
+                    )}
                   </div>
                 </form>
               </div>

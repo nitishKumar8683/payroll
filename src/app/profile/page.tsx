@@ -36,7 +36,7 @@ const Profile = () => {
     console.log(id);
     try {
       if (!image) {
-        return toast.error("Select the image")
+        return toast.error("Select the image");
       }
 
       const formData = new FormData();
@@ -48,13 +48,13 @@ const Profile = () => {
       );
       const data = await response.data;
       console.log(data.msg.image_url);
-       const imageData = {
-         image_url: data.msg.image_url,
-         public_id: data.msg.public_id,
-         _id: data.msg._id,
-       };
+      const imageData = {
+        image_url: data.msg.image_url,
+        public_id: data.msg.public_id,
+        _id: data.msg._id,
+      };
       setImages(imageData);
-      toast.success("Profile Image Updated")
+      toast.success("Profile Image Updated");
     } catch (error: any) {
       console.log(error.message);
     }
