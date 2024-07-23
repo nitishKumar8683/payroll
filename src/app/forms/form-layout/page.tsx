@@ -9,8 +9,6 @@ const FormLayout = () => {
   const [user, setUser]: any = useState({
     name: "",
     email: "",
-    password: "",
-    confirm_password: "",
     role: "",
   });
 
@@ -30,8 +28,6 @@ const FormLayout = () => {
     if (
       !user.name ||
       !user.email ||
-      !user.password ||
-      !user.confirm_password ||
       !user.role ||
       !validateEmail(user.email)
     ) {
@@ -45,12 +41,6 @@ const FormLayout = () => {
       if (!validateEmail(user.email)) {
         toast.error("Please enter a valid email");
       }
-      if (!user.password) {
-        toast.error("Enter your password");
-      }
-      if (!user.confirm_password) {
-        toast.error("Enter your confirm_password");
-      }
       if (!user.role) {
         toast.error("Enter your role");
       }
@@ -62,8 +52,6 @@ const FormLayout = () => {
         setUser({
           name: "",
           email: "",
-          password: "",
-          confirm_password: "",
           role: "",
         });
       } else {
@@ -276,7 +264,7 @@ const FormLayout = () => {
                   />
                 </div>
 
-                <div className="mb-4.5">
+                {/* <div className="mb-4.5">
                   <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                     Password
                   </label>
@@ -293,9 +281,9 @@ const FormLayout = () => {
                     placeholder="Enter password"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
-                </div>
+                </div> */}
 
-                <div className="mb-5.5">
+                {/* <div className="mb-5.5">
                   <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                     Re-type Password
                   </label>
@@ -312,14 +300,14 @@ const FormLayout = () => {
                     placeholder="Re-enter password"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
-                </div>
+                </div> */}
 
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                  <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
+                  {/* <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
                     <h3 className="font-medium text-black dark:text-white">
                       Select input
                     </h3>
-                  </div>
+                  </div> */}
                   <div className="flex flex-col gap-5.5 p-6.5">
                     <div>
                       <label className="mb-3 block text-sm font-medium text-black dark:text-white">
