@@ -13,6 +13,15 @@ export async function POST(request) {
     const reqData = await request.json();
     const { name, email, role } = reqData;
 
+    const user = await User.findOne({ email });
+    if(user) {
+      return NextResponse.json({
+        message : "Email already exists",
+        status : 400,
+        success : false
+      })
+    }
+
     const password = otpgnerator.generate(6, {
       upperCaseAlphabets: false,
       lowerCaseAlphabets: false,

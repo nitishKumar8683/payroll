@@ -31,15 +31,11 @@ export default function Login() {
         setLoading(true);
         const response = await axios.post("/api/users/login", user);
         console.log(response);
-        if (response.data.tokenData.role == "admin") {
-          router.push("/");
-        } else {
-          alert("Only for admin ");
-          setUser({
-            email: "",
-            password: "",
-          });
-        }
+        router.push("/");
+        setUser({
+          email: "",
+          password: "",
+        });
       } catch (error: any) {
         setUser({
           email: "",
