@@ -38,9 +38,7 @@ const menuGroups: MenuGroup[] = [
             viewBox="0 0 18 18"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Dashboard SVG path */}
-          </svg>
+          ></svg>
         ),
         label: "Dashboard",
         route: "/",
@@ -57,9 +55,7 @@ const menuGroups: MenuGroup[] = [
             viewBox="0 0 18 18"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Calendar SVG path */}
-          </svg>
+          ></svg>
         ),
         label: "Calendar",
         route: "/calendar",
@@ -76,9 +72,7 @@ const menuGroups: MenuGroup[] = [
             viewBox="0 0 18 18"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Profile SVG path */}
-          </svg>
+          ></svg>
         ),
         label: "Profile",
         route: "/profile",
@@ -95,9 +89,24 @@ const menuGroups: MenuGroup[] = [
             viewBox="0 0 18 18"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Forms SVG path */}
-          </svg>
+          ></svg>
+        ),
+        label: "Attendence",
+        route: "/attendence",
+        adminOnly: true,
+        managerOnly: true,
+        employeeOnly: true,
+      },
+      {
+        icon: (
+          <svg
+            className="fill-current"
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          ></svg>
         ),
         label: "Forms",
         route: "#",
@@ -113,9 +122,7 @@ const menuGroups: MenuGroup[] = [
                 viewBox="0 0 18 18"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* Add Employee SVG path */}
-              </svg>
+              ></svg>
             ),
             adminOnly: true,
           },
@@ -133,9 +140,7 @@ const menuGroups: MenuGroup[] = [
             viewBox="0 0 18 19"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Tables SVG path */}
-          </svg>
+          ></svg>
         ),
         label: "Tables",
         route: "/tables",
@@ -190,7 +195,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Sidebar header */}
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
           <h1 className="text-2xl font-semibold text-white dark:text-white">
             {dashboardHeading}
@@ -207,9 +211,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               viewBox="0 0 20 18"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Hamburger menu SVG path */}
-            </svg>
+            ></svg>
           </button>
         </div>
 
@@ -224,13 +226,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <ul className="mb-6 flex flex-col gap-1.5">
                   {group.menuItems
                     .filter((menuItem) => {
-                      if (dataUser === "admin" ) {
-                        return true;
-                      } else if (dataUser === "manager" || dataUser === "employee") {
+                      if (dataUser === "admin") {
+                        return menuItem.label !== "Attendence";
+                      } else if (
+                        dataUser === "manager" ||
+                        dataUser === "employee"
+                      ) {
                         return (
                           menuItem.label === "Dashboard" ||
                           menuItem.label === "Calendar" ||
-                          menuItem.label === "Profile"
+                          menuItem.label === "Profile" ||
+                          menuItem.label === "Attendence"
                         );
                       }
                       return false;

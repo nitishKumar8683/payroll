@@ -14,12 +14,12 @@ export async function POST(request) {
     const { name, email, role } = reqData;
 
     const user = await User.findOne({ email });
-    if(user) {
+    if (user) {
       return NextResponse.json({
-        message : "Email already exists",
-        status : 400,
-        success : false
-      })
+        message: "Email already exists",
+        status: 400,
+        success: false,
+      });
     }
 
     const password = otpgnerator.generate(6, {
@@ -28,23 +28,23 @@ export async function POST(request) {
       specialChars: false,
     });
 
-    //const password = generateRandomPassword();
+    // const password = "hello";
 
-    try {
-      const emailResponse = await mailSender(
-        email,
-        "Your Account Information",
-        emailTemplate(email, password),
-      );
-      console.log("Email sent successfully:", emailResponse.response);
-    } catch (error) {
-      console.error("Error occurred while sending email:", error);
-      return NextResponse.json({
-        success: false,
-        message: "Error occurred while sending email",
-        error: error.message,
-      });
-    }
+    // try {
+    //   const emailResponse = await mailSender(
+    //     email,
+    //     "Your Account Information",
+    //     emailTemplate(email, password),
+    //   );
+    //   console.log("Email sent successfully:", emailResponse.response);
+    // } catch (error) {
+    //   console.error("Error occurred while sending email:", error);
+    //   return NextResponse.json({
+    //     success: false,
+    //     message: "Error occurred while sending email",
+    //     error: error.message,
+    //   });
+    // }
 
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
