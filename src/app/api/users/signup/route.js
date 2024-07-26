@@ -2,8 +2,8 @@ import bcrypt from "bcryptjs";
 import { connect } from "@/db/dbConfig";
 import User from "@/models/userModel";
 import { NextResponse } from "next/server";
-import mailSender from "@/helpers/mailSender";
-import emailTemplate from "@/helpers/template/emailTemplate";
+// import mailSender from "@/helpers/mailSender";
+// import emailTemplate from "@/helpers/template/emailTemplate";
 import otpgnerator from "otp-generator";
 
 connect();
@@ -33,15 +33,15 @@ export async function POST(request) {
     // try {
     //   const emailResponse = await mailSender(
     //     email,
-    //     "Your Account Information",
+    //     'Your Account Information',
     //     emailTemplate(email, password),
     //   );
-    //   console.log("Email sent successfully:", emailResponse.response);
+    //   console.log('Email sent successfully:', emailResponse.response);
     // } catch (error) {
-    //   console.error("Error occurred while sending email:", error);
+    //   console.error('Error occurred while sending email:', error);
     //   return NextResponse.json({
     //     success: false,
-    //     message: "Error occurred while sending email",
+    //     message: 'Error occurred while sending email',
     //     error: error.message,
     //   });
     // }
@@ -62,6 +62,7 @@ export async function POST(request) {
 
     const savedUser = await newUser.save();
     console.log(savedUser);
+
     return NextResponse.json({
       message: "User created successfully",
       savedUser,
@@ -69,9 +70,13 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error("Error creating user:", error);
-    return {
-      status: 500,
-      body: JSON.stringify({ error: error.message }),
-    };
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Error creating user",
+        error: error.message,
+      },
+      { status: 500 },
+    );
   }
 }
