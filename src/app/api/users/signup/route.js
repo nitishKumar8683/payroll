@@ -2,8 +2,8 @@ import bcrypt from "bcryptjs";
 import { connect } from "@/db/dbConfig";
 import User from "@/models/userModel";
 import { NextResponse } from "next/server";
-// import mailSender from "@/helpers/mailSender";
-// import emailTemplate from "@/helpers/template/emailTemplate";
+import mailSender from "@/helpers/mailSender";
+import emailTemplate from "@/helpers/template/emailTemplate";
 import otpgnerator from "otp-generator";
 
 connect();
@@ -28,23 +28,21 @@ export async function POST(request) {
       specialChars: false,
     });
 
-    // const password = "hello";
-
-    // try {
-    //   const emailResponse = await mailSender(
-    //     email,
-    //     'Your Account Information',
-    //     emailTemplate(email, password),
-    //   );
-    //   console.log('Email sent successfully:', emailResponse.response);
-    // } catch (error) {
-    //   console.error('Error occurred while sending email:', error);
-    //   return NextResponse.json({
-    //     success: false,
-    //     message: 'Error occurred while sending email',
-    //     error: error.message,
-    //   });
-    // }
+    try {
+      const emailResponse = await mailSender(
+        email,
+        "Your Account Information",
+        emailTemplate(email, password),
+      );
+      console.log("Email sent successfully:", emailResponse.response);
+    } catch (error) {
+      console.error("Error occurred while sending email:", error);
+      return NextResponse.json({
+        success: false,
+        message: "Error occurred while sending email",
+        error: error.message,
+      });
+    }
 
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
