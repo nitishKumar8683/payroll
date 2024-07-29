@@ -1,0 +1,26 @@
+Admin
+
+Email : 	nitishk.cityinnovates@gmail.com
+Password : 	admin
+
+
+---------------------------------------------------------------
+
+
+Manager 
+
+Email : 	kumarnitish4384@gmail.com
+password : 	617738
+
+
+Email : 	edu.srjha01@gmail.com
+Password : 	869984	
+
+
+----------------------------------------------------------------
+
+
+Emploee 
+
+Email : 	kumarnitish4380@gmail.com
+Password : 	857365	

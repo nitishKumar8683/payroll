@@ -17,10 +17,6 @@ export async function POST(req, { params }) {
 
     const endTimeDate = new Date(endTime);
 
-    console.log(`Request ID: ${id}`);
-    console.log(`Request Body:`, reqBody);
-
-    // Find the record to update
     const attendance = await Attendence.findOneAndUpdate(
       {
         userId: id,
@@ -29,8 +25,6 @@ export async function POST(req, { params }) {
       { $set: { endTime: endTimeDate.toISOString() } },
       { new: true },
     );
-
-    console.log("Found and Updated Attendance Record:", attendance);
 
     if (!attendance) {
       return NextResponse.json({

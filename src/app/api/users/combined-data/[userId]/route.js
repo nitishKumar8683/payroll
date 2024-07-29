@@ -1,6 +1,4 @@
-// pages/api/attendance.js
 import { connect } from "@/db/dbConfig";
-import User from "@/models/userModel";
 import Attendence from "@/models/attendenceModel";
 import { NextResponse } from "next/server";
 
@@ -8,11 +6,10 @@ connect();
 
 export async function GET(req) {
   try {
-    // Perform the aggregation
     const data = await Attendence.aggregate([
       {
         $lookup: {
-          from: "users", // collection name in MongoDB
+          from: "users",
           localField: "userId",
           foreignField: "_id",
           as: "userDetails",

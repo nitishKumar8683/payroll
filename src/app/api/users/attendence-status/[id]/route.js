@@ -22,7 +22,7 @@ export async function GET(req, { params }) {
       return NextResponse.json({
         isStarted: true,
         startTime: attendance.startTime,
-        endTime: attendance.endTime || null, // Include endTime if available
+        endTime: attendance.endTime || null,
       });
     }
 

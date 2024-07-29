@@ -129,11 +129,10 @@ const TableThree = () => {
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p
-                      className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
-                        data.role === "manager"
-                          ? "bg-success text-success"
-                          : "bg-warning text-warning"
-                      }`}
+                      className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${data.role === "manager"
+                        ? "bg-success text-success"
+                        : "bg-warning text-warning"
+                        }`}
                     >
                       {data.role}
                     </p>
@@ -235,9 +234,8 @@ const TableThree = () => {
                             });
                             changeTextColor();
                           }}
-                          className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${
-                            isOptionSelected ? "text-black dark:text-white" : ""
-                          }`}
+                          className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${isOptionSelected ? "text-black dark:text-white" : ""
+                            }`}
                         >
                           <option
                             value=""
