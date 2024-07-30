@@ -26,7 +26,7 @@ export async function GET(request) {
     const userId = decodedToken.id;
     console.log(userId);
     const usersData = await User.find({
-      _id: { $ne: userId }, // Correct usage: $ne should compare with userId variable
+      _id: { $ne: userId },
       isDelete: { $ne: "1" },
     }).select("-password");
 

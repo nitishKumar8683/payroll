@@ -148,6 +148,57 @@ const menuGroups: MenuGroup[] = [
         managerOnly: true,
         employeeOnly: true,
       },
+      {
+        icon: (
+          <svg
+            className="fill-current"
+            width="18"
+            height="19"
+            viewBox="0 0 18 19"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          ></svg>
+        ),
+        label: "Leave",
+        route: "/leave",
+        adminOnly: true,
+        managerOnly: true,
+        employeeOnly: true,
+      },
+      {
+        icon: (
+          <svg
+            className="fill-current"
+            width="18"
+            height="19"
+            viewBox="0 0 18 19"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          ></svg>
+        ),
+        label: "Task",
+        route: "/task",
+        adminOnly: true,
+        managerOnly: true,
+        employeeOnly: true,
+      },
+      {
+        icon: (
+          <svg
+            className="fill-current"
+            width="18"
+            height="19"
+            viewBox="0 0 18 19"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          ></svg>
+        ),
+        label: "Tasks",
+        route: "/tasks-user",
+        adminOnly: true,
+        managerOnly: true,
+        employeeOnly: true,
+      },
     ],
   },
 ];
@@ -227,7 +278,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   {group.menuItems
                     .filter((menuItem) => {
                       if (dataUser === "admin") {
-                        return menuItem.label !== "Attendence";
+                        return (
+                          menuItem.label !== "Attendence" &&
+                          menuItem.label !== "Tasks"
+                        );
                       } else if (
                         dataUser === "manager" ||
                         dataUser === "employee"
@@ -236,7 +290,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           menuItem.label === "Dashboard" ||
                           menuItem.label === "Calendar" ||
                           menuItem.label === "Profile" ||
-                          menuItem.label === "Attendence"
+                          menuItem.label === "Attendence" ||
+                          menuItem.label === "Tasks"
                         );
                       }
                       return false;

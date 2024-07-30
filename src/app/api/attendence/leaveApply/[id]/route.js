@@ -1,5 +1,8 @@
+import { connect } from "@/db/dbConfig";
 import LeaveAttendence from "@/models/leaveAttendenceModel";
 import { NextResponse } from "next/server";
+
+connect()
 
 export async function POST(request, { params }) {
     const id = params.id;
@@ -23,8 +26,11 @@ export async function POST(request, { params }) {
             endTime: end,
             leaveType,
             reason,
+            isApproved: false,
+            isRejected: false,
         });
         const savedLeaveAttendence = await newLeaveAttendence.save();
+        console.log(savedLeaveAttendence);
 
         return NextResponse.json({
             savedLeaveAttendence,

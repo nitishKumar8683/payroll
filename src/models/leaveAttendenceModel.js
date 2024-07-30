@@ -18,6 +18,14 @@ const leaveAttendenceSchema = new mongoose.Schema({
   reason: {
     type: String,
   },
+  isApproved: {
+    type: Boolean,
+    default: false,
+  },
+  isRejected: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const LeaveAttendence =
