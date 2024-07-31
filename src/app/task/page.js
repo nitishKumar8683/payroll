@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Modal from "@/components/Modal/TaskStatusTable";
 
 const TaskAssignmentForm = () => {
     const {
@@ -15,11 +16,19 @@ const TaskAssignmentForm = () => {
     } = useForm();
     const [selectedUser, setSelectedUser] = useState("");
     const [userData, setUserData] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         userDetail();
     }, []);
 
+    const modalOpen = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     const onSubmit = async (data) => {
         try {
@@ -50,7 +59,25 @@ const TaskAssignmentForm = () => {
     return (
         <DefaultLayout>
             <ToastContainer />
-            <div className="to-red-500 to-red-500 mx-auto w-full max-w-3xl rounded-lg bg-gradient-to-r from-purple-400 via-pink-500 p-6 shadow-lg">
+            <div className="p-4">
+                <div className="flex justify-end">
+                    <button
+                        onClick={modalOpen}
+                        className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    >
+                        Task Status
+                    </button>
+                </div>
+                {isModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="modal-container mx-auto p-4 rounded-lg bg-white shadow-md">
+                            <Modal onClose={closeModal} />
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <div className="to-red mt-5 mx-auto w-full max-w-3xl rounded-lg bg-gradient-to-r from-purple-400 via-pink-500 p-6 shadow-lg">
                 <h1 className="mb-6 text-3xl font-bold text-white">Assign Task</h1>
                 <form
                     onSubmit={handleSubmit(onSubmit)}

@@ -17,6 +17,8 @@ const Attendence = () => {
   const [totalLeaveTaken, setTotalLeaveTaken] = useState(0);
   const [totalLeaveAllowed] = useState(20);
 
+  
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -216,7 +218,15 @@ const Attendence = () => {
             Add Request
           </button>
         </div>
-        <Modal isOpen={isModalOpen} closeModal={closeModal} userId={userId} />
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <Modal
+              isOpen={isModalOpen}
+              closeModal={closeModal}
+              userId={userId}
+            />
+          </div>
+        )}
       </div>
 
       <div className="bg-gray-100 p-4">

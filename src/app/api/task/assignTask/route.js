@@ -6,7 +6,7 @@ connect();
 
 export async function POST(req, res) {
     try {
-        const reqBody =await req.json();
+        const reqBody = await req.json();
         const { taskName, taskDescription, dueDate, assignedUser } = reqBody
         console.log(taskName)
 
@@ -15,7 +15,11 @@ export async function POST(req, res) {
             taskDescription,
             dueDate,
             assignedUser,
+            status: "pending",
+            completedAt: null
         });
+
+        console.log(newTask)
 
         return NextResponse.json({ success: true, newTask });
     } catch (error) {
