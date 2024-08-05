@@ -199,7 +199,7 @@ const Profile = () => {
               </div>
 
               <div className="container mx-0 flex min-w-full flex-col items-center px-10 py-10">
-                <button className="mt-3 rounded bg-purple-900 px-4 py-2 font-bold text-white hover:bg-blue-400">
+                <button className="mt-3 animate-pulse rounded border-2 border-purple-900 px-4 py-2 font-bold text-white hover:bg-blue-400">
                   Update Image
                 </button>
               </div>

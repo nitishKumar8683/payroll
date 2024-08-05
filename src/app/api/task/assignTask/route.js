@@ -7,7 +7,7 @@ connect();
 export async function POST(req, res) {
     try {
         const reqBody = await req.json();
-        const { taskName, taskDescription, dueDate, assignedUser } = reqBody
+        const { taskName, taskDescription, dueDate, assignedUser, assignedBucket } = reqBody
         console.log(taskName)
 
         const newTask = await Task.create({
@@ -15,6 +15,7 @@ export async function POST(req, res) {
             taskDescription,
             dueDate,
             assignedUser,
+            assignedBucket,
             status: "pending",
             completedAt: null
         });

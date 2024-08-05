@@ -136,6 +136,45 @@ const TaskAssignmentForm = () => {
                     <div>
                         <label
                             className="text-gray-700 mb-2 block font-medium"
+                            htmlFor="bucketSelect"
+                        >
+                            Bucket or Project
+                        </label>
+                        <select
+                            id="bucketSelect"
+                            {...register("assignedBucket", {
+                                required: "Bucket is required",
+                            })}
+                            onChange={(e) => setSelectedUser(e.target.value)}
+                            className="border-gray-300 w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        >
+                            <option value="">Select a Bucket</option>
+                            <option value="WDD">
+                                WDD
+                            </option>
+                            <option value="SEO">
+                                SEO
+                            </option>
+                            <option value="SMO">
+                                SMO
+                            </option>
+                            <option value="PAIDCAMPAIGN">
+                                PAID CAMPAIGN
+                            </option>
+                            <option value="ADHOC">
+                                ADHOC
+                            </option>
+                        </select>
+                        {errors.assignedBucket && (
+                            <p className="text-red-500 mt-1 text-sm">
+                                {errors.assignedBucket.message}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label
+                            className="text-gray-700 mb-2 block font-medium"
                             htmlFor="userSelect"
                         >
                             Assign To

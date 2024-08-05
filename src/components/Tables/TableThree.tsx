@@ -5,6 +5,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Bars } from "react-loader-spinner";
 
 interface User {
   _id: string;
@@ -18,6 +19,7 @@ const TableThree = () => {
   const [isModalOpen, setIsModalopen] = useState(false);
   const [editUser, setEditUser] = useState<User | null>(null);
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
+   const [loading, setLoading] = useState<boolean>(false);
 
   const changeTextColor = () => {
     setIsOptionSelected(true);
@@ -27,11 +29,18 @@ const TableThree = () => {
     userDetail();
   }, []);
 
-  const userDetail = async () => {
-    const response = await axios.get("/api/users/getUser");
-    const data = response.data.usersData;
-    setUserData(data);
-  };
+ const userDetail = async () => {
+   setLoading(true);
+   try {
+     const response = await axios.get("/api/users/getUser");
+     const data = response.data.usersData;
+     setUserData(data);
+   } catch (error) {
+     toast.error("Failed to fetch users");
+   } finally {
+     setLoading(false);
+   }
+ };
 
   const deleteUser = async (_id: any) => {
     const id: any = _id;
@@ -98,65 +107,80 @@ const TableThree = () => {
 
       <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="max-w-full overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead>
-              <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                  Name
-                </th>
-                <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                  Email
-                </th>
-                <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                  Role
-                </th>
-                <th className="px-4 py-4 font-medium text-black dark:text-white">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {userData.map((data, key) => (
-                <tr key={key}>
-                  <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                    <h5 className="font-medium text-black dark:text-white">
-                      {data.name}
-                    </h5>
-                    {/* <p className="text-sm">{data.email}</p> */}
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">{data.email}</p>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p
-                      className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${data.role === "manager"
-                        ? "bg-success text-success"
-                        : "bg-warning text-warning"
-                        }`}
-                    >
-                      {data.role}
-                    </p>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <div className="flex items-center space-x-3.5">
-                      <button
-                        onClick={() => getUserById(data._id)}
-                        className="hover:text-primary"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => deleteUser(data._id)}
-                        className="hover:text-primary"
-                      >
-                        <MdDeleteOutline />
-                      </button>
-                    </div>
-                  </td>
+          {loading ? (
+            <div className="flex h-48 items-center justify-center">
+              <Bars
+                height="80"
+                width="80"
+                color="#4fa94d"
+                ariaLabel="bars-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            </div>
+          ) : (
+            <table className="w-full table-auto">
+              <thead>
+                <tr className="bg-gray-2 text-left dark:bg-meta-4">
+                  <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                    Name
+                  </th>
+                  <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                    Email
+                  </th>
+                  <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+                    Role
+                  </th>
+                  <th className="px-4 py-4 font-medium text-black dark:text-white">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {userData.map((data, key) => (
+                  <tr key={key}>
+                    <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                      <h5 className="font-medium text-black dark:text-white">
+                        {data.name}
+                      </h5>
+                      {/* <p className="text-sm">{data.email}</p> */}
+                    </td>
+                    <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                      <p className="text-black dark:text-white">{data.email}</p>
+                    </td>
+                    <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                      <p
+                        className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
+                          data.role === "manager"
+                            ? "bg-success text-success"
+                            : "bg-warning text-warning"
+                        }`}
+                      >
+                        {data.role}
+                      </p>
+                    </td>
+                    <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                      <div className="flex items-center space-x-3.5">
+                        <button
+                          onClick={() => getUserById(data._id)}
+                          className="hover:text-primary"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          onClick={() => deleteUser(data._id)}
+                          className="hover:text-primary"
+                        >
+                          <MdDeleteOutline />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 
@@ -234,8 +258,9 @@ const TableThree = () => {
                             });
                             changeTextColor();
                           }}
-                          className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${isOptionSelected ? "text-black dark:text-white" : ""
-                            }`}
+                          className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${
+                            isOptionSelected ? "text-black dark:text-white" : ""
+                          }`}
                         >
                           <option
                             value=""

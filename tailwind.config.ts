@@ -309,6 +309,40 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(100%)" },
           "50%": { transform: "translateY(0)" },
         },
+        moveText: {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
+        fadeText: {
+          "0%": { opacity: "0" },
+          "25%": { opacity: "1" },
+          "75%": { opacity: "1" },
+          "100%": { opacity: "0" },
+        },
+        arrowMove: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(8px)" },
+        },
+        pulse: {
+          "0%": {
+            transform: "scale(1)",
+            opacity: "1",
+            backgroundColor: "#6b21a8", // Initial background color
+            borderColor: "#6b21a8", // Initial border color
+          },
+          "50%": {
+            transform: "scale(1.05)",
+            opacity: "0.7",
+            backgroundColor: "#8b5cf6", // Background color during pulse
+            borderColor: "#8b5cf6", // Border color during pulse
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "1",
+            backgroundColor: "#6b21a8", // Reset to initial background color
+            borderColor: "#6b21a8", // Reset to initial border color
+          },
+        },
       },
       animation: {
         linspin: "linspin 1568.2353ms linear infinite",
@@ -327,6 +361,10 @@ const config: Config = {
         line1: "line 10s infinite linear",
         line2: "line-revert 8s infinite linear",
         line3: "line 7s infinite linear",
+        "move-fade":
+          "moveText 20s linear infinite, fadeText 10s ease-in-out infinite;",
+        "arrow-move": "arrowMove 0.3s ease-in-out",
+        pulse: "pulse 1.1s ease infinite",
       },
     },
   },

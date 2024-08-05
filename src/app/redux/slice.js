@@ -1,30 +1,42 @@
-const {
-  createSlice,
-  nanoid,
-  current,
-  createAsyncThunk,
-} = require("@reduxjs/toolkit");
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-  userAPIData: [],
+  userAPIData: null,
+  isLoading: true,
+  error: null,
 };
 
-export const fetchApiUsers = createAsyncThunk("fetchApiUsers", async () => {
-  const result = await fetch("/api/users/me");
-  return result.json();
-});
+export const fetchApiUsers = createAsyncThunk(
+  "user/fetchApiUsers",
+  async () => {
+    const response = await fetch("/api/users/me");
+    console.log(response);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  },
+);
 
-const Slice = createSlice({
+const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers:(builder) => {
-      builder.addCase(fetchApiUsers.fulfilled, (state, action) => {
-        console.log("reducer", action);
-
-        (state.isloading = false), (state.userAPIData = action.payload);
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchApiUsers.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchApiUsers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.userAPIData = action.payload.dataUser;
+      })
+      .addCase(fetchApiUsers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
       });
   },
 });
 
-export const { user } = Slice.actions;
-export default Slice.reducer;
+export default userSlice.reducer;

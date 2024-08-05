@@ -4,6 +4,7 @@ import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import axios from "axios";
+import { ThreeDots } from "react-loader-spinner";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -206,14 +207,18 @@ const menuGroups: MenuGroup[] = [
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const [dataUser, setDataUser] = useState<string>("");
   const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
+  const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
+   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true); 
         const response = await axios.get("/api/users/me");
         setDataUser(response.data.dataUser.role);
       } catch (error) {
         console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -247,7 +252,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         }`}
       >
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-          <h1 className="text-2xl font-semibold text-white dark:text-white">
+          <h1 className="animate-line3 text-2xl font-semibold text-white dark:text-white">
             {dashboardHeading}
           </h1>
           <button
@@ -269,7 +274,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         {/* Sidebar menu */}
         <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
           <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
-            {menuGroups.map((group, groupIndex) => (
+             {loading ? (
+              <div className="flex items-center justify-center h-full">
+                <ThreeDots
+                  visible={true}
+                  height="80"
+                  width="80"
+                  color="#4fa94d"
+                  radius="9"
+                  ariaLabel="three-dots-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              </div>
+            ) : (
+            menuGroups.map((group, groupIndex) => (
               <div key={groupIndex}>
                 <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
                   {group.name}
@@ -306,7 +325,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     ))}
                 </ul>
               </div>
-            ))}
+            ))
+            )}
           </nav>
         </div>
       </aside>

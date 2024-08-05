@@ -1,35 +1,40 @@
 "use client";
-import { useState } from "react";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchApiUsers } from '../redux/slice';
 
-const NotificationButton = () => {
-  const [permission, setPermission] = useState(Notification.permission);
+const Home = () => {
+  const dispatch = useDispatch();
+  const { userAPIData, isLoading, error } = useSelector((state) => state.user || {});
 
-  const requestPermission = async () => {
-    const permission = await Notification.requestPermission();
-    setPermission(permission);
-  };
+  console.log("User API Data:", userAPIData);
+  console.log("Loading:", isLoading);
+  console.log("Error:", error);
 
-  const sendNotification = () => {
-    if (Notification.permission === "granted") {
-      new Notification("Hello!", {
-        body: "This is a test notification.",
-        icon: "/images/brand/images.png",
-      });
-    } else {
-      alert("Notification permission denied.");
-    }
-  };
+  useEffect(() => {
+    console.log("Dispatching fetchApiUsers");
+    dispatch(fetchApiUsers());
+  }, [dispatch]);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div>
-      {permission !== "granted" && (
-        <button onClick={requestPermission}>
-          Request Notification Permission
-        </button>
+      <h1>User Data</h1>
+      {userAPIData ? (
+        <div>
+          <h2>{userAPIData.name}</h2>
+          <p>Email: {userAPIData.email}</p>
+          <p>Phone: {userAPIData.phoneNumber}</p>
+          <p>Role: {userAPIData.role}</p>
+          {/* <img src={userAPIData.image_url} alt={userAPIData.name} /> */}
+        </div>
+      ) : (
+        <p>No user data available</p>
       )}
-      <button onClick={sendNotification}>Send Notification</button>
     </div>
   );
 };
 
-export default NotificationButton;
+export default Home;

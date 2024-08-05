@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { BRAND } from "@/types/brand";
 import Image from "next/image";
 import DropdownDefault from "../Dropdowns/DropdownDefault";
@@ -85,11 +85,10 @@ const TableFour: React.FC = () => {
 
           {brandData.map((brand, key) => (
             <div
-              className={`grid grid-cols-3 sm:grid-cols-4 ${
-                key === brandData.length - 1
+              className={`grid grid-cols-3 sm:grid-cols-4 ${key === brandData.length - 1
                   ? ""
                   : "border-b border-stroke dark:border-strokedark"
-              }`}
+                }`}
               key={key}
             >
               <div className="flex items-center gap-3 p-2.5 xl:p-5">

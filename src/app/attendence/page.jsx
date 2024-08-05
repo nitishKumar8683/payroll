@@ -17,8 +17,6 @@ const Attendence = () => {
   const [totalLeaveTaken, setTotalLeaveTaken] = useState(0);
   const [totalLeaveAllowed] = useState(20);
 
-  
-  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -105,7 +103,7 @@ const Attendence = () => {
     e.preventDefault();
 
     if (!userId) {
-      toast.error("User ID is not available");
+      toast.error("User ID is not available , Please try again");
       return;
     }
 
@@ -124,6 +122,8 @@ const Attendence = () => {
       const response = await axios.post(`/api/users/attendence/${userId}`, {
         startTime: newStartTime,
       });
+
+      console.log(response);
 
       if (response.data.status) {
         setStartTime(newStartTime);
