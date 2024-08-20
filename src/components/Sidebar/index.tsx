@@ -307,9 +307,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       ) {
                         return (
                           menuItem.label === "Dashboard" ||
-                          menuItem.label === "Calendar" ||
+                         // menuItem.label === "Calendar" ||
                           menuItem.label === "Profile" ||
-                          menuItem.label === "Attendence" ||
+                          //menuItem.label === "Attendence" ||
                           menuItem.label === "Tasks"
                         );
                       }
