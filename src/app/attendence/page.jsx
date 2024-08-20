@@ -244,7 +244,7 @@ const Attendence = () => {
                 </p>
                 <p className="text-lg font-medium">
                   Total Days Absent:{" "}
-                  <span className="text-red-600 font-bold">Working On it</span>
+                  <span className="text-red font-bold">Working On it</span>
                 </p>
               </div>
             </div>
@@ -263,7 +263,7 @@ const Attendence = () => {
                 </p>
                 <p className="text-lg font-medium">
                   Leave Taken:{" "}
-                  <span className="text-red-200 font-bold">
+                  <span className="text-red font-bold">
                     {totalLeaveTaken}
                   </span>
                 </p>
@@ -278,7 +278,7 @@ const Attendence = () => {
 
         <div className="mt-6">
           <form>
-            <div className="bg-gray-100 flex min-h-screen flex-col items-center justify-start p-2">
+            <div className="bg-gray flex min-h-screen flex-col items-center justify-start p-2">
               <div className="flex w-full max-w-md flex-col items-center rounded-lg bg-white p-6 shadow-lg">
                 <div className="mb-4 text-center text-4xl font-bold">
                   {formatTime(time)}
@@ -286,11 +286,10 @@ const Attendence = () => {
                 <button
                   type="button"
                   onClick={isStarted ? endAttendance : attendneceUser}
-                  className={`w-full rounded-lg px-4 py-2 font-semibold text-white shadow-md ${
-                    isStarted
+                  className={`w-full rounded-lg px-4 py-2 font-semibold text-white shadow-md ${isStarted
                       ? "bg-blue-600 hover:bg-blue-700"
                       : "bg-blue-600 hover:bg-blue-700"
-                  }`}
+                    }`}
                 >
                   {isStarted ? "End Time" : "Start Time"}
                 </button>
@@ -311,9 +310,8 @@ const Attendence = () => {
                   {leaveDataStatus.map((leaveData, index) => (
                     <tr
                       key={leaveData._id}
-                      className={`hover:bg-gray-100 transition-colors duration-300 ${
-                        index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                      }`}
+                      className={`hover:bg-gray-100 transition-colors duration-300 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                        }`}
                     >
                       <td className="text-gray-800 border-gray-200 border-b p-4">
                         {leaveData.userDetails.name}
@@ -332,13 +330,12 @@ const Attendence = () => {
                       </td>
                       <td className="border-gray-200 border-b p-4 text-center">
                         <span
-                          className={`inline-flex items-center rounded-md px-2 py-1 font-semibold text-white ${
-                            leaveData.isApproved
+                          className={`inline-flex items-center rounded-md px-2 py-1 font-semibold text-white ${leaveData.isApproved
                               ? "bg-green-500"
                               : leaveData.isRejected
                                 ? "bg-red"
                                 : "bg-yellow-500"
-                          }`}
+                            }`}
                         >
                           {leaveData.isApproved
                             ? "Approved"

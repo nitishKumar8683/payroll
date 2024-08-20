@@ -18,6 +18,7 @@ const taskSchema = new mongoose.Schema({
     assignedBucket: {
         type: String,
     },
+    
     status: {
         type: String,
         enum: ['pending', 'inprogress', 'completed'],

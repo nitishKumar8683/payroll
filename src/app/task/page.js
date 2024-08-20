@@ -172,7 +172,7 @@ const TaskAssignmentForm = () => {
                         )}
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label
                             className="text-gray-700 mb-2 block font-medium"
                             htmlFor="userSelect"
@@ -199,7 +199,7 @@ const TaskAssignmentForm = () => {
                                 {errors.assignedUser.message}
                             </p>
                         )}
-                    </div>
+                    </div> */}
 
                     <button
                         type="submit"

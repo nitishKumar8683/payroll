@@ -8,6 +8,9 @@ const TaskList = () => {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isWorkTimeModalOpen, setIsWorkTimeModalOpen] = useState(false);
+    const [workDuration, setWorkDuration] = useState(0);
+    const [workLogs, setWorkLogs] = useState([]);
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -22,6 +25,45 @@ const TaskList = () => {
         fetchTasks();
     }, []);
 
+    const handleUpdateWorkDuration = async () => {
+        if (!selectedTask || workDuration <= 0) return;
+
+        try {
+            const response = await axios.post("/api/task/workOnTask", {
+                taskId: selectedTask._id,
+                workDuration: parseInt(workDuration),
+            });
+
+            if (response.status === 200) {
+                setTasks(
+                    tasks.map((task) =>
+                        task._id === selectedTask._id
+                            ? { ...task, workDuration: response.data.workLog.workDuration }
+                            : task,
+                    ),
+                );
+                closeModal();
+            } else {
+                console.error("Failed to save work duration:", response.data);
+            }
+        } catch (error) {
+            console.error("Error saving work duration:", error);
+        }
+    };
+
+    const fetchWorkLogs = async () => {
+        try {
+            const response = await axios.get("/api/task/getWorkOnTask", { withCredentials: true });
+            if (response.status === 200) {
+                setWorkLogs(response.data);
+            } else {
+                console.error("Failed to fetch work logs:", response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching work logs:", error);
+        }
+    };
+
     const openModal = (task) => {
         setSelectedTask(task);
         setIsModalOpen(true);
@@ -30,6 +72,15 @@ const TaskList = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedTask(null);
+    };
+
+    const openWorkTimeModal = async () => {
+        await fetchWorkLogs();
+        setIsWorkTimeModalOpen(true);
+    };
+
+    const closeWorkTimeModal = () => {
+        setIsWorkTimeModalOpen(false);
     };
 
     const handleStatusChange = async (newStatus) => {
@@ -66,9 +117,16 @@ const TaskList = () => {
     return (
         <>
             <DefaultLayout>
+                <button
+                    onClick={openWorkTimeModal}
+                    className="mb-4 rounded-lg bg-blue-500 px-6 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
+                >
+                    Work Time
+                </button>
                 <div className="bg-gray-100 flex min-h-screen items-start justify-center pt-8">
                     <div className="w-full max-w-4xl rounded-lg bg-white p-8 shadow-lg">
-                        <h1 className="text-gray-800 mb-6 text-3xl font-bold">Task List</h1>
+                        <h1 className="text-gray-800 mb-6 text-3xl font-bold">Project Task List</h1>
+                       
                         <div className="space-y-4">
                             {tasks.length === 0 ? (
                                 <div className="bg-gray-200 text-gray-700 flex items-center justify-center rounded-lg p-4 shadow-md">
@@ -86,10 +144,10 @@ const TaskList = () => {
                                         <div className="text-lg font-semibold">{task.taskName}</div>
                                         <span
                                             className={`rounded-full px-3 py-1 text-sm font-medium ${task.status === "completed"
-                                                    ? "bg-green-500"
-                                                    : task.status === "inprogress"
-                                                        ? "bg-yellow-500"
-                                                        : "bg-red"
+                                                ? "bg-green-500"
+                                                : task.status === "inprogress"
+                                                    ? "bg-yellow-500"
+                                                    : "bg-red"
                                                 }`}
                                         >
                                             {task.status.charAt(0).toUpperCase() +
@@ -105,49 +163,123 @@ const TaskList = () => {
 
             {isModalOpen && selectedTask && (
                 <Modal onClose={closeModal}>
-                    <h2 className="text-gray-800 mb-4 border-b pb-2 text-2xl font-bold">
-                        Task Details
-                    </h2>
-                    <div className="mt-4 rounded-lg border bg-white p-4 shadow-lg">
-                        <p className="mb-2 text-lg">
-                            <strong className="font-semibold">Task Name: </strong>{" "}
-                            {selectedTask.taskName}
-                        </p>
-                        <p className="mb-2 text-lg">
-                            <strong className="font-semibold">Description: </strong>{" "}
-                            {selectedTask.taskDescription}
-                        </p>
-                        <p className="mb-2 text-lg">
-                            <strong className="font-semibold">Due Date: </strong>{" "}
-                            {new Date(selectedTask.dueDate).toLocaleDateString()}
-                        </p>
-                        <p className="mb-2 text-lg">
-                            <strong className="font-semibold">Assigned To: </strong>{" "}
-                            {selectedTask.userDetails.name} ({selectedTask.userDetails.email})
-                        </p>
-                        <p className="mb-2 text-lg">
-                            <strong className="font-semibold">Completed Date: </strong>{" "}
-                            {selectedTask.completedAt
-                                ? new Date(selectedTask.completedAt).toLocaleDateString()
-                                : "Not completed yet"}
-                        </p>
-                        <div className="mt-4 flex space-x-4">
+                    <div className="p-6 mt-5">
+                        <h2 className="text-gray-800 mb-4 border-b pb-2 text-2xl font-bold">
+                            Task Details
+                        </h2>
+                        <div className="space-y-4">
+                            <div className="flex items-center text-lg">
+                                <strong className="font-semibold text-gray-700 w-36">Task Name:</strong>
+                                <span className="text-gray-900">{selectedTask.taskName}</span>
+                            </div>
+                            <div className="flex items-center text-lg">
+                                <strong className="font-semibold text-gray-700 w-36">Description:</strong>
+                                <p className="text-gray-900 ml-2">{selectedTask.taskDescription}</p>
+                            </div>
+                            <div className="flex items-center text-lg">
+                                <strong className="font-semibold text-gray-700 w-36">Due Date:</strong>
+                                <span className="text-gray-900">{new Date(selectedTask.dueDate).toLocaleDateString()}</span>
+                            </div>
+                            <div className="flex items-center text-lg">
+                                <strong className="font-semibold text-gray-700 w-36">Completed Date:</strong>
+                                <span className="text-gray-900 ml-2">
+                                    {selectedTask.completedAt
+                                        ? new Date(selectedTask.completedAt).toLocaleDateString()
+                                        : "Not completed yet"}
+                                </span>
+                            </div>
+                            <div className="flex items-center text-lg space-x-4">
+                                <strong className="font-semibold text-gray-700 w-36">Work Duration (minutes):</strong>
+                                <input
+                                    type="number"
+                                    value={workDuration}
+                                    onChange={(e) => setWorkDuration(e.target.value)}
+                                    className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-md shadow-sm p-2 w-32 text-gray-900"
+                                    placeholder="0"
+                                    min="0"
+                                />
+                            </div>
+                        </div>
+                        <div className="mt-6 flex justify-end space-x-4">
                             <button
-                                className="rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                                onClick={() => handleStatusChange("completed")}
+                                className="rounded-lg bg-blue-500 px-6 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
+                                onClick={handleUpdateWorkDuration}
                             >
-                                Mark as Completed
+                                Save Work Duration
                             </button>
                             <button
-                                className="rounded-lg bg-yellow-500 px-4 py-2 text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
-                                onClick={() => handleStatusChange("inprogress")}
+                                className="rounded-lg bg-red px-6 py-2 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
+                                onClick={closeModal}
                             >
-                                Mark as In Progress
+                                Close
                             </button>
                         </div>
                     </div>
                 </Modal>
             )}
+
+            {isWorkTimeModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-50 ">
+                    <div className="bg-white rounded-lg shadow-md w-full max-w-4xl p-4 relative mr-20">
+                        <h2 className="text-lg font-semibold text-orange-500 mb-4">Work Time Logs</h2>
+                        {/* Ensure the table container is aligned to the right */}
+                        <div className="flex justify-end">
+                            <div className="w-full max-w-5xl"> {/* Adjusted width to fit better */}
+                                <table className="w-full border-collapse">
+                                    <thead className="bg-black text-white">
+                                        <tr>
+                                            <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Task Name</th>
+                                            <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Date</th>
+                                            <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Working Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {workLogs.map((log) => (
+                                            <tr key={log._id} className="border-b border-gray-200">
+                                                <td className="py-2 px-4 text-md text-gray-800">{log.taskName}</td>
+                                                <td className="py-2 px-4 text-md text-gray-800">{new Date(log.date).toLocaleDateString()}</td>
+                                                <td className="py-2 px-4 text-md text-gray-800">{log.workDuration} minutes</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {/* Pagination */}
+                        {/* <div className="mt-4 flex justify-center">
+                <ul className="flex">
+                    {Array.from({ length: Math.ceil(workLogs.length / tasksPerPage) }, (_, index) => (
+                        <li key={index}>
+                            <button
+                                className={`mx-1 px-3 py-1 rounded ${index + 1 === currentPage ? 'bg-black text-white' : 'bg-gray-200'
+                                    }`}
+                                onClick={() => paginate(index + 1)}
+                            >
+                                {index + 1}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div> */}
+                        <button
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                            onClick={closeWorkTimeModal}
+                        >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            )}
+
+
+
+
+
+
+
+
         </>
     );
 };

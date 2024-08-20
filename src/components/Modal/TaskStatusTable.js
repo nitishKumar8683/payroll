@@ -58,7 +58,7 @@ const TaskStatusTable = ({ onClose, children }) => {
                                             <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Task Name</th>
                                             <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Task Description</th>
 
-                                            <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Assigned To</th>
+                                       
                                             <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Due Date</th>
                                             <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Assigned Date</th>
                                             <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Completed Date</th>
@@ -71,7 +71,6 @@ const TaskStatusTable = ({ onClose, children }) => {
                                                 <td className="py-2 px-4 text-md text-pink-800">{task.taskName}</td>
                                                 <td className="py-2 px-4 text-md text-pink-800">{task.taskDescription}</td>
 
-                                                <td className="py-2 px-4 text-md text-pink-800">{task.userDetails.name} ({task.userDetails.email})</td>
                                                 <td className="py-2 px-4 text-md text-pink-800">{new Date(task.dueDate).toLocaleDateString()}</td>
                                                 <td className="py-2 px-4 text-md text-pink-800">{task.createdAt ? format(new Date(task.createdAt), 'dd/MM/yyyy') : 'N/A'}</td>
                                                 <td className="py-2 px-4 text-md text-pink-800">{task.completedAt
