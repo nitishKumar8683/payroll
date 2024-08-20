@@ -31,14 +31,14 @@ const TaskList = () => {
         try {
             const response = await axios.post("/api/task/workOnTask", {
                 taskId: selectedTask._id,
-                workDuration: parseInt(workDuration),
+                workDuration: parseFloat(workDuration), 
             });
 
             if (response.status === 200) {
                 setTasks(
                     tasks.map((task) =>
                         task._id === selectedTask._id
-                            ? { ...task, workDuration: response.data.workLog.workDuration }
+                            ? { ...task, workDuration: response.data.workLog.workDuration } // Store in hours
                             : task,
                     ),
                 );
@@ -114,6 +114,20 @@ const TaskList = () => {
         }
     };
 
+    const groupLogsByDate = (logs) => {
+        return logs.reduce((acc, log) => {
+            const date = new Date(log.createdAt).toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+            if (!acc[date]) {
+                acc[date] = { logs: [], totalHours: 0 };
+            }
+            acc[date].logs.push(log);
+            acc[date].totalHours += log.workDuration;
+            return acc;
+        }, {});
+    };
+
+
+
     return (
         <>
             <DefaultLayout>
@@ -126,7 +140,6 @@ const TaskList = () => {
                 <div className="bg-gray-100 flex min-h-screen items-start justify-center pt-8">
                     <div className="w-full max-w-4xl rounded-lg bg-white p-8 shadow-lg">
                         <h1 className="text-gray-800 mb-6 text-3xl font-bold">Project Task List</h1>
-                       
                         <div className="space-y-4">
                             {tasks.length === 0 ? (
                                 <div className="bg-gray-200 text-gray-700 flex items-center justify-center rounded-lg p-4 shadow-md">
@@ -189,7 +202,7 @@ const TaskList = () => {
                                 </span>
                             </div>
                             <div className="flex items-center text-lg space-x-4">
-                                <strong className="font-semibold text-gray-700 w-36">Work Duration (minutes):</strong>
+                                <strong className="font-semibold text-gray-700 w-36">Work Duration (hours):</strong>
                                 <input
                                     type="number"
                                     value={workDuration}
@@ -197,6 +210,7 @@ const TaskList = () => {
                                     className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-md shadow-sm p-2 w-32 text-gray-900"
                                     placeholder="0"
                                     min="0"
+                                    step="0.1"
                                 />
                             </div>
                         </div>
@@ -219,48 +233,38 @@ const TaskList = () => {
             )}
 
             {isWorkTimeModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-50 ">
-                    <div className="bg-white rounded-lg shadow-md w-full max-w-4xl p-4 relative mr-20">
+                <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-50 p-4">
+                    <div className="bg-white rounded-lg shadow-md w-full max-w-4xl p-6 relative mr-10">
                         <h2 className="text-lg font-semibold text-orange-500 mb-4">Work Time Logs</h2>
-                        {/* Ensure the table container is aligned to the right */}
-                        <div className="flex justify-end">
-                            <div className="w-full max-w-5xl"> {/* Adjusted width to fit better */}
-                                <table className="w-full border-collapse">
-                                    <thead className="bg-black text-white">
-                                        <tr>
-                                            <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Task Name</th>
-                                            <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Date</th>
-                                            <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Working Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {workLogs.map((log) => (
-                                            <tr key={log._id} className="border-b border-gray-200">
-                                                <td className="py-2 px-4 text-md text-gray-800">{log.taskName}</td>
-                                                <td className="py-2 px-4 text-md text-gray-800">{new Date(log.date).toLocaleDateString()}</td>
-                                                <td className="py-2 px-4 text-md text-gray-800">{log.workDuration} minutes</td>
+
+                        {/* Container for grouping logs by date */}
+                        <div className="space-y-4">
+                            {Object.entries(groupLogsByDate(workLogs)).map(([date, { logs, totalHours }]) => (
+                                <div key={date} className="border rounded-lg mb-4">
+                                    <div className="bg-gray-200 p-4 font-semibold text-lg text-gray-700 flex justify-between">
+                                        <span>{new Date(date).toLocaleDateString()}</span>
+                                        <span className="text-gray-900 font-medium">{totalHours.toFixed(2)} hours</span>
+                                    </div>
+                                    <table className="w-full border-collapse">
+                                        <thead className="bg-black text-white">
+                                            <tr>
+                                                <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Task Name</th>
+                                                <th className="py-3 px-4 text-left uppercase font-semibold text-sm">Working Time</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            {logs.map((log) => (
+                                                <tr key={log._id} className="border-b border-gray-200">
+                                                    <td className="py-2 px-4 text-md text-gray-800">{log.task.taskName || "N/A"}</td>
+                                                    <td className="py-2 px-4 text-md text-gray-800">{(log.workDuration).toFixed(2)} hours</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ))}
                         </div>
-                        {/* Pagination */}
-                        {/* <div className="mt-4 flex justify-center">
-                <ul className="flex">
-                    {Array.from({ length: Math.ceil(workLogs.length / tasksPerPage) }, (_, index) => (
-                        <li key={index}>
-                            <button
-                                className={`mx-1 px-3 py-1 rounded ${index + 1 === currentPage ? 'bg-black text-white' : 'bg-gray-200'
-                                    }`}
-                                onClick={() => paginate(index + 1)}
-                            >
-                                {index + 1}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            </div> */}
+
                         <button
                             className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
                             onClick={closeWorkTimeModal}
@@ -272,12 +276,6 @@ const TaskList = () => {
                     </div>
                 </div>
             )}
-
-
-
-
-
-
 
 
         </>
